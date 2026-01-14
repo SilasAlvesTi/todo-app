@@ -1,5 +1,7 @@
 import { useState } from "react";
 import type { Tarefa } from "../types/tarefa";
+import { GenericButton } from "../../../components/Button/Button";
+import GenericInput from "../../../components/Input/Input";
 
 interface ItemProps {
   tarefas: Tarefa[];
@@ -29,7 +31,7 @@ export default function Item({
   }
 
   return (
-    <div className="w-full flex flex-col items-center gap-2">
+    <div className="w-full flex flex-col items-center">
       {tarefas.map((tarefa) => (
         <div
           key={tarefa.id}
@@ -45,19 +47,18 @@ export default function Item({
 
           <div className="px-4">
             {editingId === tarefa.id ? (
-              <input
+              <GenericInput
                 type="text"
-                className="w-full border-2 border-purple-200 px-2 text-purple-400"
+                className="w-full"
                 value={editingNome}
                 onChange={(e) => setEditingNome(e.target.value)}
               />
             ) : (
               <p
-                className={`text-lg break-words ${
-                  tarefa.concluida
+                className={`text-lg break-all max-w-md ${tarefa.concluida
                     ? "line-through text-gray-400"
                     : "text-purple-400"
-                }`}
+                  }`}
               >
                 {tarefa.nome}
               </p>
@@ -67,34 +68,36 @@ export default function Item({
           <div className="flex justify-end items-center gap-2">
             {editingId === tarefa.id ? (
               <>
-                <button
+                <GenericButton
                   className="text-green-400"
                   onClick={() => saveEdit(tarefa.id)}
                 >
                   Salvar
-                </button>
-                <button
-                  className="text-gray-400"
+                </GenericButton>
+                <GenericButton
+                  className="text-gray-400 text-sm"
                   onClick={() => setEditingId(null)}
                 >
                   Cancelar
-                </button>
+                </GenericButton>
               </>
             ) : (
-              <button
-                className="text-blue-400"
-                onClick={() => startEdit(tarefa)}
-              >
-                Editar
-              </button>
+              <>
+                <GenericButton
+                  className="text-blue-400"
+                  onClick={() => startEdit(tarefa)}
+                >
+                  Editar
+                </GenericButton>
+                <GenericButton
+                  className="text-red-400"
+                  onClick={() => onDeleteTarefa(tarefa.id)}
+                >
+                  Deletar
+                </GenericButton>
+              </>
             )}
 
-            <button
-              className="text-red-400"
-              onClick={() => onDeleteTarefa(tarefa.id)}
-            >
-              Deletar
-            </button>
           </div>
         </div>
       ))}

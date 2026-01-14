@@ -1,4 +1,6 @@
 import { useState } from "react";
+import { GenericButton } from "../../../components/Button/Button";
+import GenericInput from "../../../components/Input/Input";
 
 interface FormProps {
   onAddTarefa: (nome: string) => void;
@@ -17,17 +19,16 @@ export default function({ onAddTarefa } : FormProps) {
   return(
     <div className="flex justify-center items-center mt-6">
       <form onSubmit={handleSubmit} className="flex gap-6">
-        <input 
+        <GenericInput 
           type="text"
-          className="text-purple-400 border-2 border-purple-200"
           value={nome}
           onChange={(e) => setNome(e.target.value)}
         />
-        <button 
+        <GenericButton 
           type="submit"
-          className="bg-transparent text-white">
+          className="text-white">
           Adicionar Tarefa
-        </button>
+        </GenericButton>
       </form>
     </div>
   );
