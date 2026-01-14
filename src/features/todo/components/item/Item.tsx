@@ -1,7 +1,9 @@
 import { useState } from "react";
-import type { Tarefa } from "../types/tarefa";
-import { GenericButton } from "../../../components/Button/Button";
-import GenericInput from "../../../components/Input/Input";
+import type { Tarefa } from "../../types/tarefa";
+import { GenericButton } from "../../../../components/Button/Button";
+import GenericInput from "../../../../components/Input/Input";
+import { TodoList } from "./TodoList";
+import { TodoItem } from "./TodoItem";
 
 interface ItemProps {
   tarefas: Tarefa[];
@@ -31,14 +33,13 @@ export default function Item({
   }
 
   return (
-    <div className="w-full flex flex-col items-center">
+    <TodoList>
       {tarefas.map((tarefa) => (
-        <div
+        <TodoItem
           key={tarefa.id}
-          className="w-full max-w-xl grid grid-cols-[32px_1fr_160px] items-center px-4 py-2 border-b border-purple-200"
         >
           <div className="flex justify-start">
-            <input
+            <GenericInput
               type="checkbox"
               checked={!!tarefa.concluida}
               onChange={() => onCompleteTarefa(tarefa.id)}
@@ -99,8 +100,8 @@ export default function Item({
             )}
 
           </div>
-        </div>
+        </TodoItem>
       ))}
-    </div>
+    </TodoList>
   );
 }
