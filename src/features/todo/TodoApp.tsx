@@ -1,11 +1,18 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import type { Tarefa } from "./types/tarefa";
 import Header from "./components/Header";
 import Item from "./components/item/Item";
 import TodoForm from "./components/TodoForm";
 
 export default function TodoApp() {
-  const [tarefas, setTarefas] = useState<Tarefa[]>([]);
+  const [tarefas, setTarefas] = useState<Tarefa[]>(() => {
+    const saved = localStorage.getItem("tarefas");
+    return saved ? JSON.parse(saved) : [];
+  });
+
+  useEffect(() => {
+    localStorage.setItem("tarefas", JSON.stringify(tarefas));
+  }, [tarefas]);
 
   function handleSubmit(nome: string) {
     if (nome === "") {
