@@ -4,6 +4,7 @@ import Header from "./components/Header";
 import Item from "./components/item/Item";
 import TodoForm from "./components/TodoForm";
 import { TodoHeader } from "./components/item/TodoHeader";
+import { TodoContainer } from "./components/item/TodoContainer";
 
 export default function TodoApp() {
   const [tarefas, setTarefas] = useState<Tarefa[]>(() => {
@@ -11,12 +12,21 @@ export default function TodoApp() {
     return saved ? JSON.parse(saved) : [];
   });
   const [filter, setFilter] = useState<"all" | "done" | "pending">("all");
+  const [text, setText] = useState('')
 
-  const tarefasFiltradas = tarefas.filter((tarefa) => {
-    if (filter === "done") return tarefa.concluida;
-    if (filter === "pending") return !tarefa.concluida;
-    return true;
+  const tarefasVisiveis = tarefas.filter((tarefa) => {
+    const matchFilter =
+      filter === "all" ||
+      (filter === "done" && tarefa.concluida) ||
+      (filter === "pending" && !tarefa.concluida);
+
+    const matchSearch = tarefa.nome
+      .toLowerCase()
+      .includes(text.toLowerCase());
+
+    return matchFilter && matchSearch;
   });
+
 
   useEffect(() => {
     localStorage.setItem("tarefas", JSON.stringify(tarefas));
@@ -67,13 +77,15 @@ export default function TodoApp() {
   return (
     <>
       <Header />
-      <TodoHeader filter={filter} onChangeFilter={setFilter} />
-      <Item
-        tarefas={tarefasFiltradas}
-        onCompleteTarefa={handleComplete}
-        onDeleteTarefa={handleDelete}
-        onEditTarefa={handleEdit}
-      />
+      <TodoContainer>
+        <TodoHeader filter={filter} onChangeFilter={setFilter} onChangeText={setText}/>
+        <Item
+          tarefas={tarefasVisiveis}
+          onCompleteTarefa={handleComplete}
+          onDeleteTarefa={handleDelete}
+          onEditTarefa={handleEdit}
+        />
+      </TodoContainer>
       <TodoForm onAddTarefa={handleSubmit} />
     </>
   )
