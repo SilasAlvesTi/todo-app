@@ -3,11 +3,19 @@ import type { Tarefa } from "./types/tarefa";
 import Header from "./components/Header";
 import Item from "./components/item/Item";
 import TodoForm from "./components/TodoForm";
+import { TodoHeader } from "./components/item/TodoHeader";
 
 export default function TodoApp() {
   const [tarefas, setTarefas] = useState<Tarefa[]>(() => {
     const saved = localStorage.getItem("tarefas");
     return saved ? JSON.parse(saved) : [];
+  });
+  const [filter, setFilter] = useState<"all" | "done" | "pending">("all");
+
+  const tarefasFiltradas = tarefas.filter((tarefa) => {
+    if (filter === "done") return tarefa.concluida;
+    if (filter === "pending") return !tarefa.concluida;
+    return true;
   });
 
   useEffect(() => {
@@ -59,8 +67,9 @@ export default function TodoApp() {
   return (
     <>
       <Header />
+      <TodoHeader filter={filter} onChangeFilter={setFilter} />
       <Item
-        tarefas={tarefas}
+        tarefas={tarefasFiltradas}
         onCompleteTarefa={handleComplete}
         onDeleteTarefa={handleDelete}
         onEditTarefa={handleEdit}

@@ -33,75 +33,77 @@ export default function Item({
   }
 
   return (
-    <TodoList>
-      {tarefas.map((tarefa) => (
-        <TodoItem
-          key={tarefa.id}
-        >
-          <div className="flex justify-start">
-            <GenericInput
-              type="checkbox"
-              checked={!!tarefa.concluida}
-              onChange={() => onCompleteTarefa(tarefa.id)}
-            />
-          </div>
-
-          <div className="px-4">
-            {editingId === tarefa.id ? (
+    <>
+      <TodoList>
+        {tarefas.map((tarefa) => (
+          <TodoItem
+            key={tarefa.id}
+          >
+            <div className="flex justify-start">
               <GenericInput
-                type="text"
-                className="w-full"
-                value={editingNome}
-                onChange={(e) => setEditingNome(e.target.value)}
+                type="checkbox"
+                checked={!!tarefa.concluida}
+                onChange={() => onCompleteTarefa(tarefa.id)}
               />
-            ) : (
-              <p
-                className={`text-lg break-all max-w-md ${tarefa.concluida
-                    ? "line-through text-gray-400"
-                    : "text-purple-400"
-                  }`}
-              >
-                {tarefa.nome}
-              </p>
-            )}
-          </div>
+            </div>
 
-          <div className="flex justify-end items-center gap-2">
-            {editingId === tarefa.id ? (
-              <>
-                <GenericButton
-                  className="text-green-400"
-                  onClick={() => saveEdit(tarefa.id)}
+            <div className="px-4">
+              {editingId === tarefa.id ? (
+                <GenericInput
+                  type="text"
+                  className="w-full"
+                  value={editingNome}
+                  onChange={(e) => setEditingNome(e.target.value)}
+                />
+              ) : (
+                <p
+                  className={`text-lg break-all max-w-md ${tarefa.concluida
+                      ? "line-through text-gray-400"
+                      : "text-purple-400"
+                    }`}
                 >
-                  Salvar
-                </GenericButton>
-                <GenericButton
-                  className="text-gray-400 text-sm"
-                  onClick={() => setEditingId(null)}
-                >
-                  Cancelar
-                </GenericButton>
-              </>
-            ) : (
-              <>
-                <GenericButton
-                  className="text-blue-400"
-                  onClick={() => startEdit(tarefa)}
-                >
-                  Editar
-                </GenericButton>
-                <GenericButton
-                  className="text-red-400"
-                  onClick={() => onDeleteTarefa(tarefa.id)}
-                >
-                  Deletar
-                </GenericButton>
-              </>
-            )}
+                  {tarefa.nome}
+                </p>
+              )}
+            </div>
 
-          </div>
-        </TodoItem>
-      ))}
-    </TodoList>
+            <div className="flex justify-end items-center gap-2">
+              {editingId === tarefa.id ? (
+                <>
+                  <GenericButton
+                    className="text-green-400"
+                    onClick={() => saveEdit(tarefa.id)}
+                  >
+                    Salvar
+                  </GenericButton>
+                  <GenericButton
+                    className="text-gray-400 text-sm"
+                    onClick={() => setEditingId(null)}
+                  >
+                    Cancelar
+                  </GenericButton>
+                </>
+              ) : (
+                <>
+                  <GenericButton
+                    className="text-blue-400"
+                    onClick={() => startEdit(tarefa)}
+                  >
+                    Editar
+                  </GenericButton>
+                  <GenericButton
+                    className="text-red-400"
+                    onClick={() => onDeleteTarefa(tarefa.id)}
+                  >
+                    Deletar
+                  </GenericButton>
+                </>
+              )}
+
+            </div>
+          </TodoItem>
+        ))}
+      </TodoList>
+    </>
   );
 }
