@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import type { Tarefa } from "./types/tarefa";
 import Header from "./components/Header";
 import Item from "./components/item/Item";
@@ -14,25 +14,27 @@ export default function TodoApp() {
   const [filter, setFilter] = useState<"all" | "done" | "pending">("all");
   const [text, setText] = useState('')
 
-  const tarefasVisiveis = tarefas.filter((tarefa) => {
-    const matchFilter =
-      filter === "all" ||
-      (filter === "done" && tarefa.concluida) ||
-      (filter === "pending" && !tarefa.concluida);
+  const tarefasVisiveis = useMemo(() => {
+    return tarefas.filter((tarefa) => {
+      const matchFilter =
+        filter === "all" ||
+        (filter === "done" && tarefa.concluida) ||
+        (filter === "pending" && !tarefa.concluida);
 
-    const matchSearch = tarefa.nome
-      .toLowerCase()
-      .includes(text.toLowerCase());
+      const matchSearch = tarefa.nome
+        .toLowerCase()
+        .includes(text.toLowerCase());
 
-    return matchFilter && matchSearch;
-  });
+      return matchFilter && matchSearch;
+    });
+  }, [tarefas, filter, text]);
 
 
   useEffect(() => {
     localStorage.setItem("tarefas", JSON.stringify(tarefas));
   }, [tarefas]);
 
-  function handleSubmit(nome: string) {
+  const handleSubmit = useCallback((nome: string) => {
     if (nome === "") {
       return;
     }
@@ -44,9 +46,9 @@ export default function TodoApp() {
         concluida: false,
       },
     ]);
-  }
+  }, []);
 
-  function handleComplete(id: string) {
+  const handleComplete = useCallback((id: string) => {
     setTarefas((anteriores) =>
       anteriores.map((tarefa) =>
         tarefa.id === id
@@ -54,17 +56,17 @@ export default function TodoApp() {
           : tarefa
       )
     );
-  }
+  }, []);
 
-  function handleDelete(id: string) {
+  const handleDelete = useCallback((id: string) => {
     setTarefas((anteriores) =>
       anteriores.filter((tarefa) =>
         tarefa.id !== id
       )
     )
-  }
+  }, []);
 
-  function handleEdit(id: string, novoNome: string) {
+  const handleEdit = useCallback((id: string, novoNome: string) => {
     setTarefas((anteriores) =>
       anteriores.map((tarefa) =>
         tarefa.id === id
@@ -72,13 +74,13 @@ export default function TodoApp() {
           : tarefa
       )
     );
-  }
+  }, []);
 
   return (
     <>
       <Header />
       <TodoContainer>
-        <TodoHeader filter={filter} onChangeFilter={setFilter} onChangeText={setText}/>
+        <TodoHeader filter={filter} onChangeFilter={setFilter} onChangeText={setText} />
         <Item
           tarefas={tarefasVisiveis}
           onCompleteTarefa={handleComplete}

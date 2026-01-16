@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { memo, useState } from "react";
 import type { Tarefa } from "../../types/tarefa";
 import { GenericButton } from "../../../../components/Button/Button";
 import GenericInput from "../../../../components/Input/Input";
@@ -11,7 +11,7 @@ interface ItemProps {
   onEditTarefa: (id: string, novoNome: string) => void;
 }
 
-export default function Item({
+function Item({
   tarefas,
   onCompleteTarefa,
   onDeleteTarefa,
@@ -105,3 +105,5 @@ export default function Item({
     </>
   );
 }
+
+export default memo(Item);

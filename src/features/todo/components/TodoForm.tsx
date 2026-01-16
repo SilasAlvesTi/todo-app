@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { memo, useState } from "react";
 import { GenericButton } from "../../../components/Button/Button";
 import GenericInput from "../../../components/Input/Input";
 
@@ -6,7 +6,7 @@ interface FormProps {
   onAddTarefa: (nome: string) => void;
 }
 
-export default function({ onAddTarefa } : FormProps) {
+function TodoForm({ onAddTarefa } : FormProps) {
   const [nome, setNome] = useState('');
 
   function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
@@ -33,3 +33,5 @@ export default function({ onAddTarefa } : FormProps) {
     </div>
   );
 }
+
+export default memo(TodoForm);
